@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include pos_barcode_scanner *.css
+recursive-include pos_barcode_scanner *.csv
+recursive-include pos_barcode_scanner *.html
+recursive-include pos_barcode_scanner *.ico
+recursive-include pos_barcode_scanner *.js
+recursive-include pos_barcode_scanner *.json
+recursive-include pos_barcode_scanner *.md
+recursive-include pos_barcode_scanner *.png
+recursive-include pos_barcode_scanner *.py
+recursive-include pos_barcode_scanner *.svg
+recursive-include pos_barcode_scanner *.txt
+recursive-exclude pos_barcode_scanner *.pyc
