@@ -129,3 +129,12 @@ page_js = {
 # override_doctype_dashboards = {
 # 	"Task": "pos_barcode_scanner.task.get_dashboard_data"
 # }
+
+fixtures = [
+    {
+        "dt": "Custom Field",
+        "filters": [
+            ["name", "in", ["POS Profile-search_by_barcode_only"]]
+        ]
+    }
+]
