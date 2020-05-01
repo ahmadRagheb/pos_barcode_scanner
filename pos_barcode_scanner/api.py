@@ -132,8 +132,15 @@ def search_barcode_number(search_value):
 
 def items_contain_barcode(search_value):
 	items_code = []
-	if search_value:
-		items_code = frappe.db.sql("""SELECT DISTINCT parent FROM `tabItem Barcode` where barcode like {barcode}""".format(barcode = frappe.db.escape('%' + search_value + '%')), as_dict=1)
+	try:
+		if int(frappe.utils.change_log.get_versions()["frappe"]["version"].split(".")[0]) >= 12:
+			if search_value:
+				items_code = frappe.db.sql("""SELECT DISTINCT parent FROM `tabItem Barcode` where barcode like {barcode}""".format(barcode = frappe.db.escape('%' + search_value + '%')), as_dict=1)
+		else:
+			if search_value:
+				items_code = frappe.db.sql("""SELECT DISTINCT parent FROM `tabItem Barcode` where barcode like '{barcode}'""".format(barcode = frappe.db.escape('%' + search_value + '%')), as_dict=1)
+	except:
+		pass
 	
 	condition = []
 	for ic in items_code:
@@ -144,10 +151,21 @@ def items_contain_barcode(search_value):
 
 	
 def get_conditions(item_code, serial_no, batch_no, barcode):
-	if serial_no or batch_no or barcode:
-		return "name like {0}".format(frappe.db.escape(item_code))
+	try:
+		if int(frappe.utils.change_log.get_versions()["frappe"]["version"].split(".")[0]) >= 12:
+			if serial_no or batch_no or barcode:
+				return "name like {0}".format(frappe.db.escape(item_code))
+			
+			return """(name like {item_code} or item_name like {item_code})""".format(item_code = frappe.db.escape('%' + item_code + '%'))
 
-	return """(name like {item_code} or item_name like {item_code})""".format(item_code = frappe.db.escape('%' + item_code + '%'))
+		else:
+			if serial_no or batch_no or barcode:
+				return "name like '{0}'".format(frappe.db.escape(item_code))
+			
+			return """(name like '{item_code}' or item_name like '{item_code}')""".format(item_code = frappe.db.escape('%' + item_code + '%'))
+
+	except:
+		return ""
     
 def get_item_group_condition(pos_profile):
 	cond = "and 1=1"
